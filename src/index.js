@@ -1,17 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import FHIR from 'fhirclient';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const rootElement = document.getElementById('root');
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const smartLaunch = () => {
+  // Authorize application
+  FHIR.oauth2
+    .init({
+      clientId: '4e3a05cb-117c-46fa-8367-80dc137d65ea',
+      scope: 'launch/patient openid profile'
+    })
+    .then(client => {
+      ReactDOM.render(<App client={client} />, rootElement);
+    });
+};
+
+smartLaunch();
